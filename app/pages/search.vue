@@ -2,6 +2,7 @@
 
 
 import {ref, onMounted} from 'vue'
+import Navbar from '~/components/Navbar.vue'
 
 const posts=ref([])
 const loading = ref(false)
@@ -73,6 +74,7 @@ onMounted(()=>{
 </script>
 
 <template>
+  <Navbar/>
 <LoadingComponent v-if="loading" />
 
 <input class="border-black border m-5 p-2 rounded-md" 

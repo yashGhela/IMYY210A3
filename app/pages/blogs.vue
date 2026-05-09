@@ -4,6 +4,7 @@
 
 import {ref, onMounted} from 'vue'
 import { StrapiBlocks } from 'vue-strapi-blocks-renderer'
+import Navbar from '~/components/Navbar.vue'
 
 const post=ref(null)
 const loading = ref(false)
@@ -49,6 +50,7 @@ onMounted(()=>{
 </script>
 
 <template>
+   <Navbar/>
 <LoadingComponent v-if="loading" />
 <p v-if="error">{{ error }}</p>
 
