@@ -3,6 +3,7 @@
 
 
 import {ref, onMounted} from 'vue'
+import { StrapiBlocks } from 'vue-strapi-blocks-renderer'
 
 const post=ref(null)
 const loading = ref(false)
@@ -55,7 +56,7 @@ onMounted(()=>{
    <h1>{{post.Title}}</h1>
    <p>{{ post.Author }}</p>
 
-   <p>{{ post.Content }}</p>
+   <StrapiBlocks :content="post.Content"/>
    
 </div>
 </template>
