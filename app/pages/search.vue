@@ -67,6 +67,45 @@ const search=()=>{
   }
 }
 
+
+const getContentSnippet = (content, maxLength = 100) => {
+  if (!content) return 'No content available'
+  
+
+  if (typeof content === 'string') {
+    return content.length > maxLength ? content.substring(0, maxLength) + '...' : content
+  }
+  
+
+  if (Array.isArray(content)) {
+    let plainText = ''
+    
+
+    const extractText = (blocks) => {
+      for (const block of blocks) {
+        if (block.text) {
+          plainText += block.text + ' '
+        }
+        if (block.children && Array.isArray(block.children)) {
+          extractText(block.children)
+        }
+      }
+    }
+    
+    extractText(content)
+    plainText = plainText.trim()
+    
+    return plainText.length > maxLength ? plainText.substring(0, maxLength) + '...' : plainText
+  }
+  
+  
+  if (content.text) {
+    return content.text.length > maxLength ? content.text.substring(0, maxLength) + '...' : content.text
+  }
+  
+  return 'Content unavailable'
+}
+
 onMounted(()=>{
   fetchPosts()
 })
@@ -77,7 +116,7 @@ onMounted(()=>{
   <Navbar/>
 <LoadingComponent v-if="loading" />
 
-<input class="border-black border m-5 p-2 rounded-md" 
+<input class="border-gray-400 active:border-gray-800 border m-5 p-2 rounded-md" 
 v-model="searchTerm"
         type="text" 
         placeholder="Enter post title..."
@@ -86,7 +125,13 @@ v-model="searchTerm"
 <p v-if="error">{{ error }}</p>
 
 <div v-if="searchedPost">
-   <NuxtLink :to="`/blogs?id=${searchedPost.documentId}`">{{ searchedPost.Title }}</NuxtLink>
+   <NuxtLink :to="`/blogs?id=${searchedPost.documentId}`">
+    <div class="p-5 m-5 bg-gray-100 rounded-md cursor-pointer ">
+                <p class="text-lg font-bold">{{ searchedPost.Title }}</p>
+                <p class="font-normal text-lg">{{ searchedPost.Author }}</p>
+                 <p class="text-gray-600 text-sm mt-2">{{ getContentSnippet(searchedPost.Content, 100) }}</p>
+              </div>
+   </NuxtLink>
    
 </div>
 </template>
