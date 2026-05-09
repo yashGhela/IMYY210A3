@@ -54,9 +54,10 @@ onMounted(()=>{
 <LoadingComponent v-if="loading" />
 <p v-if="error">{{ error }}</p>
 
-<div v-if="post">
-   <h1>{{post.Title}}</h1>
-   <p>{{ post.Author }}</p>
+<div class="px-20" v-if="post">
+   <h1 class="font-bold text-center text-3xl my-10">{{post.Title}}</h1>
+   <p class="text-2xl mt-10  text-center">{{ post.Author }}</p>
+   <hr class="  border-gray-300 my-10">
 
    <StrapiBlocks :content="post.Content"/>
    
