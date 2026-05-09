@@ -1,6 +1,7 @@
 <script setup>
 
 import {ref, onMounted} from 'vue'
+import Navbar from '~/components/Navbar.vue'
 
 const posts=ref([])
 const loading = ref(false)
@@ -18,7 +19,17 @@ const fetchPosts= async() =>{
     const data =await response.json()
     console.log("fetching posts")
 
-    posts.value=data
+     if (data && data.data) {
+      posts.value = data.data
+    } else if (Array.isArray(data)) {
+      posts.value = data
+    } else if (data && data.posts) {
+      posts.value = data.posts
+    } else {
+      posts.value = data
+    }
+    
+    console.log("Processed posts:", posts.value)
 
 
   }catch(err){
@@ -40,10 +51,12 @@ onMounted(()=>{
 
 <template>
   <h1 class="text-3xl font-bold ">
+     <Navbar/>
      <LoadingComponent v-if="loading" />
         <p v-if="error">{{ error }}</p>
         <ul v-if="!loading && !error">
             <li v-for="post in posts" :key="post.id">
+              <p>{{ post.Title }}</p>
             </li>
           </ul>
   </h1>

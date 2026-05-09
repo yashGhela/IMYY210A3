@@ -14,14 +14,22 @@ const fetchPosts= async() =>{
   error.value= null;
 
   try{
-    const response  = await fetch(`http://localhost:1337/api/posts/${title}`)
+    const response  = await fetch(`http://localhost:1337/api/posts/`)
 
     if(!response.ok) throw new Error('Failed to fetch posts')
     
     const data =await response.json()
     console.log("fetching posts")
 
-    posts.value=data
+    if (data && data.data) {
+      posts.value = data.data
+    } else if (Array.isArray(data)) {
+      posts.value = data
+    } else if (data && data.posts) {
+      posts.value = data.posts
+    } else {
+      posts.value = data
+    }
 
     for(var i=0; i<data.length;i++){
 
@@ -44,17 +52,15 @@ const fetchPosts= async() =>{
   }
 }
 
-onMounted(()=>{
-
-  fetchPosts()
-
-})
 
 
 </script>
 
 <template>
 <LoadingComponent v-if="loading" />
+
+<input class="border-black border m-5 p-2 rounded-md" :value="searchedPost" type="text">
+<button class="bg-blue-400 p-2 cursor-pointer text-white hover:bg-blue-600 rounded-md" @click="fetchPosts">Search</button>
 <p v-if="error">{{ error }}</p>
 
 <div v-if="searchedPost">
