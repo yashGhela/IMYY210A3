@@ -13,17 +13,19 @@ const route = useRoute()
 const fetchPosts= async() =>{
   loading.value =true;
   error.value= null;
-  console.log(route.params)
+  const query = route.query.id
+  console.log(query)
 
   try{
-    const response  = await fetch(`http://localhost:1337/api/posts/${route.params.id}`)
+    const response  = await fetch(`http://localhost:1337/api/posts/${query}`)
 
     if(!response.ok) throw new Error('Failed to fetch post')
     
     const data =await response.json()
-    console.log("fetching posts")
+    console.log("fetching post")
 
-    post.value=data
+    post.value=data.data
+    console.log(post.value)
 
     
 
@@ -50,10 +52,10 @@ onMounted(()=>{
 <p v-if="error">{{ error }}</p>
 
 <div v-if="post">
-   <h1>{{post.title}}</h1>
-   <p>{{ post.author }}</p>
+   <h1>{{post.Title}}</h1>
+   <p>{{ post.Author }}</p>
 
-   <p>{{ post.content }}</p>
+   <p>{{ post.Content }}</p>
    
 </div>
 </template>

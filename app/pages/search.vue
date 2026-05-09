@@ -84,7 +84,7 @@ v-model="searchTerm"
 <p v-if="error">{{ error }}</p>
 
 <div v-if="searchedPost">
-   <NuxtLink :to="`/blogs?id=${searchedPost.id}`">{{ searchedPost.Title }}</NuxtLink>
+   <NuxtLink :to="`/blogs?id=${searchedPost.documentId}`">{{ searchedPost.Title }}</NuxtLink>
    
 </div>
 </template>
