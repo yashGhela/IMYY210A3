@@ -4,6 +4,8 @@
 import {ref, onMounted} from 'vue'
 import Navbar from '~/components/Navbar.vue'
 
+const config = useRuntimeConfig()
+
 const posts=ref([])
 const loading = ref(false)
 const error = ref(null)
@@ -15,7 +17,7 @@ const fetchPosts= async() =>{
   error.value= null;
 
   try{
-    const response  = await fetch(`http://localhost:1337/api/posts/`)
+    const response  = await fetch(`${config.public.strapiUrl}/api/posts`)
 
     if(!response.ok) throw new Error('Failed to fetch posts')
     

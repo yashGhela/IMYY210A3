@@ -6,6 +6,9 @@ import {ref, onMounted} from 'vue'
 import { StrapiBlocks } from 'vue-strapi-blocks-renderer'
 import Navbar from '~/components/Navbar.vue'
 
+const config = useRuntimeConfig()
+
+
 const post=ref(null)
 const loading = ref(false)
 const error = ref(null)
@@ -19,7 +22,7 @@ const fetchPosts= async() =>{
   console.log(query)
 
   try{
-    const response  = await fetch(`http://localhost:1337/api/posts/${query}`)
+    const response  = await fetch(`${config.public.strapiUrl}/api/posts/${query}`)
 
     if(!response.ok) throw new Error('Failed to fetch post')
     
