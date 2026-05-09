@@ -13,6 +13,7 @@ const route = useRoute()
 const fetchPosts= async() =>{
   loading.value =true;
   error.value= null;
+  console.log(route.params)
 
   try{
     const response  = await fetch(`http://localhost:1337/api/posts/${route.params.id}`)

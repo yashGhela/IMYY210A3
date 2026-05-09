@@ -6,7 +6,7 @@ import {ref, onMounted} from 'vue'
 const posts=ref([])
 const loading = ref(false)
 const error = ref(null)
-const title=ref(null)
+const searchTerm=ref('')
 const searchedPost= ref(null)
 
 const fetchPosts= async() =>{
@@ -23,27 +23,11 @@ const fetchPosts= async() =>{
 
     if (data && data.data) {
       posts.value = data.data
-    } else if (Array.isArray(data)) {
-      posts.value = data
-    } else if (data && data.posts) {
-      posts.value = data.posts
-    } else {
-      posts.value = data
-    }
+    } 
 
-    for(var i=0; i<data.length;i++){
-
-        if(data[i].title==title){
-            searchedPost=data[i];
-            break;
-        }
-    }
-
-    if(searchedPost==null){
-        error.value='Post not found'
-    }
-
-
+  
+     console.log("Posts loaded:", )
+     console.log(posts.value[0])
   }catch(err){
     error.value= err.message;
     console.log("Posts API error:", err)
@@ -52,19 +36,55 @@ const fetchPosts= async() =>{
   }
 }
 
+const search=()=>{
+  searchedPost.value = null
+  error.value = null
+  
+  console.log(searchTerm.value)
+  
+  // if (!searchTerm.value.trim()) {
+  //   error.value = 'Please enter a title to search'
+  //   return
+  // }
+  
+  
+  for (let i = 0; i < posts.value.length; i++) {
+    
+    console.log(posts.value[i].Title)
+    
+    if (posts.value[i].Title==searchTerm.value) {
+      
+      searchedPost.value = posts.value[i]
+      break
+    }
+  }
+  
+  console.log("Found search term:"+searchedPost.value)
 
+  if (!searchedPost.value) {
+    error.value = `No post found with title: "${searchTerm.value}"`
+  }
+}
+
+onMounted(()=>{
+  fetchPosts()
+})
 
 </script>
 
 <template>
 <LoadingComponent v-if="loading" />
 
-<input class="border-black border m-5 p-2 rounded-md" :value="searchedPost" type="text">
-<button class="bg-blue-400 p-2 cursor-pointer text-white hover:bg-blue-600 rounded-md" @click="fetchPosts">Search</button>
+<input class="border-black border m-5 p-2 rounded-md" 
+v-model="searchTerm"
+        type="text" 
+        placeholder="Enter post title..."
+        @keyup.enter="search"/>
+<button class="bg-blue-400 p-2 cursor-pointer text-white hover:bg-blue-600 rounded-md" @click="search">Search</button>
 <p v-if="error">{{ error }}</p>
 
 <div v-if="searchedPost">
-   <h1>{{searchedPost.title}}</h1>
+   <NuxtLink :to="`/blogs?id=${searchedPost.id}`">{{ searchedPost.Title }}</NuxtLink>
    
 </div>
 </template>
